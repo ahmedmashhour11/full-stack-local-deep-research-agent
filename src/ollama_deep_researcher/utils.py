@@ -9,6 +9,9 @@ from tavily import TavilyClient
 from duckduckgo_search import DDGS
 
 from langchain_community.utilities import SearxSearchWrapper
+from langchain_community.vectorstores import Qdrant
+from langchain_ollama import OllamaEmbeddings
+from qdrant_client import QdrantClient
 
 # Constants
 CHARS_PER_TOKEN = 4
@@ -136,6 +139,41 @@ def format_sources(search_results: Dict[str, Any]) -> str:
     return "\n".join(
         f"* {source['title']} : {source['url']}" for source in search_results["results"]
     )
+
+
+def get_nobel_retriever(
+    ollama_url: str,
+    qdrant_url: str,
+    collection_name: str = "Nobel_Laureates",
+    top_k: int = 4,
+):
+    """
+    Create a retriever backed by a Qdrant vector store containing Nobel laureate data.
+
+    Args:
+        ollama_url (str): Base URL of the Ollama server providing embeddings.
+        qdrant_url (str): URL of the Qdrant instance.
+        collection_name (str, optional): Qdrant collection to query. Defaults to "Nobel_Laureates".
+        top_k (int, optional): Number of documents to retrieve. Defaults to 4.
+
+    Returns:
+        Callable[[str], list]: Retriever that returns the top_k documents for a query.
+    """
+
+    embeddings = OllamaEmbeddings(
+        model="mxbai-embed-large",
+        base_url=ollama_url,
+    )
+
+    client = QdrantClient(url=qdrant_url)
+
+    vectorstore = Qdrant(
+        client=client,
+        collection_name=collection_name,
+        embeddings=embeddings,
+    )
+
+    return vectorstore.as_retriever(search_kwargs={"k": top_k})
 
 
 def fetch_raw_content(url: str) -> Optional[str]:

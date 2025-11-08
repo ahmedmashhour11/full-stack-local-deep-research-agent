@@ -13,6 +13,7 @@ dependencies = [
     "langchain-community>=0.3.9",
     "tavily-python>=0.5.0",
     "langchain-ollama>=0.3.6",
+    "qdrant-client>=1.9.0",
     "duckduckgo-search>=7.3.0",
     "langchain-openai>=0.1.1",
     "openai>=1.12.0",

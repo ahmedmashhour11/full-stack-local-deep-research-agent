@@ -59,6 +59,26 @@ class Configuration(BaseModel):
         title="Use Tool Calling",
         description="Use tool calling instead of JSON mode for structured output",
     )
+    use_nobel_rag: bool = Field(
+        default=False,
+        title="Enable Nobel RAG",
+        description="Augment research with Nobel laureate retrieval from Qdrant",
+    )
+    qdrant_url: str = Field(
+        default="http://127.0.0.1:6333",
+        title="Qdrant URL",
+        description="Base URL for the Qdrant instance",
+    )
+    qdrant_collection: str = Field(
+        default="Nobel_Laureates",
+        title="Qdrant Collection",
+        description="Vector store collection name for Nobel laureate data",
+    )
+    qdrant_top_k: int = Field(
+        default=4,
+        title="Qdrant Top K",
+        description="Number of documents to retrieve from Qdrant per query",
+    )
 
     @classmethod
     def from_runnable_config(

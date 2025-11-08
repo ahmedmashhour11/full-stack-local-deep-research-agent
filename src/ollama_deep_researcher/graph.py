@@ -19,6 +19,7 @@ from ollama_deep_researcher.utils import (
     searxng_search,
     strip_thinking_tokens,
     get_config_value,
+    get_nobel_retriever,
 )
 from ollama_deep_researcher.state import (
     SummaryState,
@@ -189,6 +190,52 @@ def generate_query(state: SummaryState, config: RunnableConfig):
     )
 
 
+def classify_nobel_topic(state: SummaryState, config: RunnableConfig):
+    """Determine whether the current topic is about Nobel prizes or laureates."""
+
+    configurable = Configuration.from_runnable_config(config)
+    query = (state.search_query or state.research_topic or "").strip()
+
+    if not query:
+        return {"is_nobel_topic": False}
+
+    if configurable.llm_provider == "lmstudio":
+        llm = ChatLMStudio(
+            base_url=configurable.lmstudio_base_url,
+            model=configurable.local_llm,
+            temperature=0,
+        )
+    else:
+        llm = ChatOllama(
+            base_url=configurable.ollama_base_url,
+            model=configurable.local_llm,
+            temperature=0,
+        )
+
+    messages = [
+        SystemMessage(
+            content=(
+                "You are a classifier that decides whether a question or topic is primarily "
+                "about Nobel Prizes or Nobel Laureates. "
+                "Respond with 'YES' if it is about Nobel prizes, laureates, Nobel committees, "
+                "or Nobel ceremonies. Otherwise respond with 'NO'. "
+                "Do not include any explanation or additional text."
+            )
+        ),
+        HumanMessage(content=f"Topic: {query}"),
+    ]
+
+    result = llm.invoke(messages)
+    content = result.content or ""
+
+    if configurable.strip_thinking_tokens:
+        content = strip_thinking_tokens(content)
+
+    answer = content.strip().upper()
+    is_nobel = answer.startswith("Y")
+    return {"is_nobel_topic": is_nobel}
+
+
 def web_research(state: SummaryState, config: RunnableConfig):
     """LangGraph node that performs web research using the generated search query.
 
@@ -262,6 +309,36 @@ def web_research(state: SummaryState, config: RunnableConfig):
     }
 
 
+def nobel_rag_node(state: SummaryState, config: RunnableConfig):
+    """LangGraph node that retrieves Nobel laureate context from Qdrant."""
+
+    configurable = Configuration.from_runnable_config(config)
+
+    if not configurable.use_nobel_rag or not state.is_nobel_topic:
+        return {}
+
+    retriever = get_nobel_retriever(
+        ollama_url=configurable.ollama_base_url,
+        qdrant_url=configurable.qdrant_url,
+        collection_name=configurable.qdrant_collection,
+        top_k=int(configurable.qdrant_top_k),
+    )
+
+    query = state.search_query or state.research_topic
+    if not query:
+        return {}
+
+    docs = retriever.invoke(query)
+    if not docs:
+        return {}
+
+    passages = "\n\n".join(doc.page_content for doc in docs if doc.page_content)
+    if not passages:
+        return {}
+
+    return {"rag_context": [passages]}
+
+
 def summarize_sources(state: SummaryState, config: RunnableConfig):
     """LangGraph node that summarizes web research results.
 
@@ -283,18 +360,30 @@ def summarize_sources(state: SummaryState, config: RunnableConfig):
     # Most recent web research
     most_recent_web_research = state.web_research_results[-1]
 
+    rag_section = "\n\n".join(state.rag_context) if state.rag_context else ""
+
     # Build the human message
     if existing_summary:
-        human_message_content = (
-            f"<Existing Summary> \n {existing_summary} \n <Existing Summary>\n\n"
-            f"<New Context> \n {most_recent_web_research} \n <New Context>"
+        message_parts = [
+            f"<Existing Summary> \n {existing_summary} \n <Existing Summary>\n\n",
+            f"<New Context> \n {most_recent_web_research} \n <New Context>\n",
+        ]
+        if rag_section:
+            message_parts.append(f"<RAG Context>\n{rag_section}\n<RAG Context>\n")
+        message_parts.append(
             f"Update the Existing Summary with the New Context on this topic: \n <User Input> \n {state.research_topic} \n <User Input>\n\n"
         )
+        human_message_content = "".join(message_parts)
     else:
-        human_message_content = (
-            f"<Context> \n {most_recent_web_research} \n <Context>"
+        message_parts = [
+            f"<Context> \n {most_recent_web_research} \n <Context>\n",
+        ]
+        if rag_section:
+            message_parts.append(f"<RAG Context>\n{rag_section}\n<RAG Context>\n")
+        message_parts.append(
             f"Create a Summary using the Context on this topic: \n <User Input> \n {state.research_topic} \n <User Input>\n\n"
         )
+        human_message_content = "".join(message_parts)
 
     # Run the LLM
     configurable = Configuration.from_runnable_config(config)
@@ -418,6 +507,17 @@ def finalize_summary(state: SummaryState):
     return {"running_summary": state.running_summary}
 
 
+def route_after_classification(
+    state: SummaryState, config: RunnableConfig
+) -> Literal["nobel_rag", "web_research"]:
+    """Route to Nobel RAG when the topic is Nobel-related and RAG is enabled."""
+
+    configurable = Configuration.from_runnable_config(config)
+    if configurable.use_nobel_rag and state.is_nobel_topic:
+        return "nobel_rag"
+    return "web_research"
+
+
 def route_research(
     state: SummaryState, config: RunnableConfig
 ) -> Literal["finalize_summary", "web_research"]:
@@ -449,6 +549,8 @@ builder = StateGraph(
     config_schema=Configuration,
 )
 builder.add_node("generate_query", generate_query)
+builder.add_node("classify_nobel_topic", classify_nobel_topic)
+builder.add_node("nobel_rag", nobel_rag_node)
 builder.add_node("web_research", web_research)
 builder.add_node("summarize_sources", summarize_sources)
 builder.add_node("reflect_on_summary", reflect_on_summary)
@@ -456,7 +558,9 @@ builder.add_node("finalize_summary", finalize_summary)
 
 # Add edges
 builder.add_edge(START, "generate_query")
-builder.add_edge("generate_query", "web_research")
+builder.add_edge("generate_query", "classify_nobel_topic")
+builder.add_conditional_edges("classify_nobel_topic", route_after_classification)
+builder.add_edge("nobel_rag", "web_research")
 builder.add_edge("web_research", "summarize_sources")
 builder.add_edge("summarize_sources", "reflect_on_summary")
 builder.add_conditional_edges("reflect_on_summary", route_research)
